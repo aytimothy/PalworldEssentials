@@ -10,6 +10,14 @@ function utilities.GuidToString(Guid)
     return a .. b .. c .. d
 end
 
+function utilities.GuidToString2(Guid)
+    local a = string.format("%016x", Guid["A"])
+    local b = string.format("%016x", Guid["B"])
+    local c = string.format("%016x", Guid["C"])
+    local d = string.format("%016x", Guid["D"])
+    return a .. b .. c .. d
+end
+
 function utilities.GetPalUtility() 
     return StaticFindObject("/Script/Pal.Default__PalUtility")
 end
@@ -58,11 +66,13 @@ end
 local InGameState = nil
 
 local printChatMessage = function(message)
-    local sender = message.Sender:ToString()
-    local senderGuid = utilities.GuidToString(message.SenderPlayerUId)
-    local recipientGuid = utilities.GuidToString(message.ReceiverPlayerUId)
+    local sender = message.Sender
+    -- local senderGuid = utilities.GuidToString2(message.SenderPlayerUId)
+    -- local recipientGuid = utilities.GuidToString2(message.ReceiverPlayerUId)
+    local senderGuid = message.SenderPlayerUId
+    local recipientGuid = message.ReceiverPlayerUId
     local messageType = message.Category
-    local message = message.Message:ToString()
+    local message = message.Message
     if messageType == 0 then
         messageType = "0: None"
     elseif messageType == 1 then
@@ -89,20 +99,10 @@ function utilities.SendMessage(WorldContext, Message)
 
     local Pal = FindFirstOf("Pal")
     local CoreUObject = FindFirstOf("CoreUObject")
-    local FPalChatMessage = Pal.FPalChatMessage
-    local FGuid = CoreUObject.FGuid
-    local chatMessage = StaticConstructObject(FPalChatMessage, WorldContext, 0, 0, 0, nil, false, false, nil)
-    local senderPlayerUId = StaticConstructObject(FGuid, WorldContext, 0, 0, 0, nil, false, false, nil)
-    senderPlayerUId.A = 0
-    senderPlayerUId.B = 1
-    senderPlayerUId.C = 0
-    senderPlayerUId.D = 0
-    chatMessage.Category = 0
-    chatMessage.Sender = "SYSTEM"
-    chatMessage.SenderPlayerUId = senderPlayerUId
-    chatMessage.Message = _message
-    chatMessage.ReceiverPlayerUid = WorldContext.PlayerId
-    -- printChatMessage(chatMessage)
+    local FGuid = require("./types/fguid")
+    local FPalChatMessage = require("./types/fpalchatmessage")
+    local chatMessage = FPalChatMessage.new(0, "SYSTEM", FGuid.new(0, 1, 0, 0), Message, WorldContext.PlayerId)
+    printChatMessage(chatMessage)
     InGameState:BroadcastChatMessage(chatMessage)
 end
 

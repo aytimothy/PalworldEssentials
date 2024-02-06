@@ -10,7 +10,7 @@ local message = {
             return
         end
 
-        local actualMessage = rawMessage.message:ToString()
+        local actualMessage = rawMessage.Message:ToString()
         actualMessage = string.sub(string.len(commandArgs[0]) + string.len(commandArgs[1]) + 3)
         
         -- Create message payload

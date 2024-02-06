@@ -50,10 +50,10 @@ local commands = {
     kick = require("./commands/kick"),
     givepal = require("./commands/givepal"),
     giveitem = require("./commands/giveitem"),
-    give = require("./commands/give"),
+    give = require("./commands/giveitem"),
     kick = require("./commands/kick"),
     tp = require("./commands/tp"),
-    give = require("./commands/give"),
+    give = require("./commands/giveitem"),
     box = require("./commands/box"),
     ping = require("./commands/ping"),
     pong = require("./commands/pong"),
@@ -69,7 +69,7 @@ local commands = {
         run = function(sender, message, commandArgs)
             local utils = require("./utilities")
             print(string.format("Unknown command '%s'", commandArgs[0]))
-            utils.SendMessage(sender, string.format("Unknown command '%s'. Type /help for help."))
+            utils.SendMessage(sender, string.format("Unknown command '%s'. Type /help for help.", commandArgs[0]))
         end
     }
 }
@@ -87,7 +87,7 @@ local handleChatMessage = function(sender, message)
         if commands[mainCommand] then
             local isUserAdmin = utilities.IsPlayerAdmin(sender)
             if isUserAdmin or not commands[mainCommand].adminOnly then
-                commands[mainCommand].run(sender, commandArgs)
+                commands[mainCommand].run(sender, message, commandArgs)
             else
                 local userName = message.Sender:ToString()
                 local userId = utilities.GuidToString(message.SenderPlayerUId)
@@ -95,7 +95,7 @@ local handleChatMessage = function(sender, message)
                 print(string.format("Denied access to command '%s' to %s (%s)", mainCommand, userName, userId))
             end
         else
-            commands["default"].run(sender, commandArgs)
+            commands["default"].run(sender, message, commandArgs)
         end
     end
 end
@@ -108,9 +108,8 @@ function essentials.Main()
 
     -- Event on message received
     RegisterHook("/Script/Pal.PalPlayerState:EnterChat_Receive", function(Context, ChatMessage)
-        local chatMessage = ChatMessage:get()
-        -- printChatMessage(chatMessage)
-        handleChatMessage(Context:get(), chatMessage)
+        -- printChatMessage(ChatMessage:get())
+        handleChatMessage(Context:get(), ChatMessage:get())
     end)
 
     -- Event on player object initialized

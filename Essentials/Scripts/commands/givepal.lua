@@ -1,7 +1,3 @@
-function givepal.give(player, palid, level, passives, special)
-
-end
-
 -- Gives you a Pal directly to your party if you have room.
 local givepal = {
     adminOnly = true,
@@ -9,5 +5,9 @@ local givepal = {
         print("Not Implemented Yet...")
     end
 }
+
+function givepal.give(player, palid, level, passives, special)
+
+end
 
 return givepal
