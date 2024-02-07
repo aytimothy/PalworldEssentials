@@ -67,8 +67,6 @@ local InGameState = nil
 
 local printChatMessage = function(message)
     local sender = message.Sender
-    -- local senderGuid = utilities.GuidToString2(message.SenderPlayerUId)
-    -- local recipientGuid = utilities.GuidToString2(message.ReceiverPlayerUId)
     local senderGuid = message.SenderPlayerUId
     local recipientGuid = message.ReceiverPlayerUId
     local messageType = message.Category
@@ -101,7 +99,7 @@ function utilities.SendMessage(WorldContext, Message)
     local CoreUObject = FindFirstOf("CoreUObject")
     local FGuid = require("./types/fguid")
     local FPalChatMessage = require("./types/fpalchatmessage")
-    local chatMessage = FPalChatMessage.new(0, "SYSTEM", FGuid.new(0, 1, 0, 0), Message, WorldContext.PlayerId)
+    local chatMessage = FPalChatMessage.new(0, "SYSTEM", 1, Message, WorldContext.PlayerId)
     printChatMessage(chatMessage)
     InGameState:BroadcastChatMessage(chatMessage)
 end

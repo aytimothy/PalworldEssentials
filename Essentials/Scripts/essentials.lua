@@ -57,6 +57,7 @@ local commands = {
     box = require("./commands/box"),
     ping = require("./commands/ping"),
     pong = require("./commands/pong"),
+    whois = require("./commands/whois"),
     help = {
         adminOnly = false,
         run = function(sender, message, commandArgs)
@@ -71,17 +72,26 @@ local commands = {
             print(string.format("Unknown command '%s'", commandArgs[0]))
             utils.SendMessage(sender, string.format("Unknown command '%s'. Type /help for help.", commandArgs[0]))
         end
-    }
+    },
+    -- Don't do anything on a built-in command
+    Shutdown = require("./commands/ignore"),
+    DoExit = require("./commands/ignore"),
+    Broadcast = require("./command/ignore"),
+    TeleportToPlayer = require("./command/ignore"),
+    TeleportToMe = require("./command/ignore"),
+    ShowPlayers = require("./command/ignore"),
+    Info = require("./command/ignore"),
+    Save = require("./command/ignore")
 }
 
 local handleChatMessage = function(sender, message)
     local senderId = sender.PlayerId
-    local message = message.Message:ToString()
+    local messageText = message.Message:ToString()
     local utilities = require("./utilities")
 
     -- Handle commands
-    if string.match(message, "^/") then
-        local commandString = string.sub(message, 2)
+    if string.match(messageText, "^/") then
+        local commandString = string.sub(messageText, 2)
         local commandArgs = utilities.SplitCommandIntoArgs(commandString)
         local mainCommand = string.lower(commandArgs[0])
         if commands[mainCommand] then

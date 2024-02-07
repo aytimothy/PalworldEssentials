@@ -6,8 +6,4 @@ local givepal = {
     end
 }
 
-function givepal.give(player, palid, level, passives, special)
-
-end
-
 return givepal

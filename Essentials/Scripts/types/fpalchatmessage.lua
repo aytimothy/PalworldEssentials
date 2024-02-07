@@ -7,10 +7,10 @@ local FPalChatMessage = {
 function FPalChatMessage.new(Category, Sender, SenderPlayerUId, Message, ReceiverPlayerUId)
     local self = setmetatable({}, FPalChatMessage)
     self.Category = Category or 0
-    self.Sender = FText(Sender):ToString() or FText("Default"):ToString()
-    self.SenderPlayerUId = SenderPlayerUId or FGuid.new(0, 0, 0, 0)
-    self.Message = FText(Message):ToString() or FText("Default"):ToString()
-    self.ReceiverPlayerUId = ReceiverPlayerUId or FGuid.new(0, 0, 0, 0)
+    self.Sender = tostring(Sender) or "SYSTEM"
+    self.SenderPlayerUId = SenderPlayerUId or 1
+    self.Message = tostring(Message) or "Default"
+    self.ReceiverPlayerUId = ReceiverPlayerUId or 0
     return self
 end
 

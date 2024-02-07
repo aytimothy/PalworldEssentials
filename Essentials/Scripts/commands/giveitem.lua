@@ -21,16 +21,4 @@ local giveitem = {
     end
 }
 
-function giveitem.getPlayerInventoryId(user)
-
-end
-
-function giveitem.getPlayerInventory(inventoryId)
-
-end
-
-function giveitem.addToInventory(inventory, amount, itemId)
-
-end
-
 return giveitem
