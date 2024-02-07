@@ -66,42 +66,39 @@ end
 local InGameState = nil
 
 local printChatMessage = function(message)
-    local sender = message.Sender
-    local senderGuid = message.SenderPlayerUId
-    local recipientGuid = message.ReceiverPlayerUId
-    local messageType = message.Category
-    local message = message.Message
-    if messageType == 0 then
+    local messageType = "?: Unknown"
+    if message.Category == 0 then
         messageType = "0: None"
-    elseif messageType == 1 then
+    elseif message.Category == 1 then
         messageType = "1: Global"
-    elseif messageType == 2 then
+    elseif message.Category == 2 then
         messageType = "2: Guild"
-    elseif messageType == 3 then
+    elseif message.Category == 3 then
         messageType = "3: Say"
     else
-        messageType = string.format("{0}: Unknown", messageType)
+        messageType = string.format("%s: Unknown", message.Category)
     end
-    print(string.format("[%s] %s (%s > %s): %s\n", messageType, sender, senderGuid, recipientGuid, message))
+    print(string.format("[%s] %s (%s > %s): %s\n", message.Category, message.Sender, message.SenderPlayerUId, message.ReceiverPlayerUId, message.Message))
 end
 
-function utilities.SendMessage(WorldContext, Message)
-    local _message = Message
+-- if in doubt, UObject:GetFullName() to figure out what the heck you are working with.
+
+function utilities.SendMessage(WorldContext, Message, Recipient)
     if PalUtility == nil or not PalUtility:IsValid() then
         PalUtility = utilities.GetPalUtility()
     end
-    if InGameState == nil or not InGameState:IsValid() then
-        -- InGameState = utilities.GetPalGameStateInGame(WorldContext)
-        InGameState = utilities.GetPalGameStateInGame2()
-    end
 
-    local Pal = FindFirstOf("Pal")
-    local CoreUObject = FindFirstOf("CoreUObject")
-    local FGuid = require("./types/fguid")
-    local FPalChatMessage = require("./types/fpalchatmessage")
-    local chatMessage = FPalChatMessage.new(0, "SYSTEM", 1, Message, WorldContext.PlayerId)
-    printChatMessage(chatMessage)
-    InGameState:BroadcastChatMessage(chatMessage)
+    if type(Recipient) == "string" then
+        local recipient = utilities.GetPlayer(Recipient)
+        local recipientPlayerState = recipient:GetPalPlayerState()
+        if recipient ~= nil then
+            PalUtility:SendSystemToPlayerChat(WorldContext, Message, recipient.playerState.PlayerUId)
+        else
+            print(string.format("Could not send message '%s' to unknown user '%s'", Message, Recipient))
+        end
+    else
+        PalUtility:SendSystemToPlayerChat(WorldContext, Message, Recipient.PlayerUId)
+    end
 end
 
 function utilities.GetPlayer(Id)
@@ -110,11 +107,20 @@ function utilities.GetPlayer(Id)
     for index, player in pairs(Players) do
         local playerState = player:GetPalPlayerState()
         if playerState ~= nil and playerState:IsValid() then
-            local playerId = tostring(playerState.PlayerId)
-            local playerUId = string.lower(utilities.GuidToString(playerState.PlayerUId))
-            local username = string.lower(playerState.PlayerNamePrivate:ToString())
-            local inputId = string.lower(Id)
-            if playerId == inputId or playerUId == inputId or username == inputId then
+            -- Numerical, ie. 257
+            if Id == tostring(playerState.PlayerId) then
+                return player
+            end
+            -- SteamId, ie. 76561198085564783
+            if Id == tostring(playerState.UniqueId) then
+                return player
+            end
+            -- Unique Id, ie. 9CF2403E -> 2633121854
+            if string.lower(Id) == string.lower(string.sub(string.format("%016x", playerState.PlayerUId.A), -8)) or Id == tostring(playerState.PlayerUId.A) then
+                return player
+            end
+            -- Name ie. aytimothy
+            if string.lower(Id) == string.lower(playerState.PlayerNamePrivate:ToString()) then
                 return player
             end
         end

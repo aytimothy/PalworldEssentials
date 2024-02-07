@@ -76,12 +76,12 @@ local commands = {
     -- Don't do anything on a built-in command
     Shutdown = require("./commands/ignore"),
     DoExit = require("./commands/ignore"),
-    Broadcast = require("./command/ignore"),
-    TeleportToPlayer = require("./command/ignore"),
-    TeleportToMe = require("./command/ignore"),
-    ShowPlayers = require("./command/ignore"),
-    Info = require("./command/ignore"),
-    Save = require("./command/ignore")
+    Broadcast = require("./commands/ignore"),
+    TeleportToPlayer = require("./commands/ignore"),
+    TeleportToMe = require("./commands/ignore"),
+    ShowPlayers = require("./commands/ignore"),
+    Info = require("./commands/ignore"),
+    Save = require("./commands/ignore")
 }
 
 local handleChatMessage = function(sender, message)
