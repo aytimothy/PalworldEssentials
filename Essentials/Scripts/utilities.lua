@@ -99,6 +99,7 @@ function utilities.SendMessage(WorldContext, Message, Recipient)
         end
     else
         PalUtility:SendSystemToPlayerChat(WorldContext, Message, Recipient.PlayerUId)
+    end
 end
 
 function utilities.GetPlayer(Id)

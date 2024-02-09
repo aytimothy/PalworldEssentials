@@ -130,7 +130,7 @@ function essentials.Main()
         local player = Context:get()
         local playerState = player.PlayerState
         local playerId = playerState.PlayerId
-        local playerUId = string.sub(string.format("%016x", playerState.PlayerUId.A), -8)
+        local playerUId = string.sub(string.format("%016x", player.PlayerUId.A), -8)
         local playerName = playerState.PlayerNamePrivate:ToString()
 
         if config.BroadcastUserConnection == true then
@@ -141,9 +141,11 @@ function essentials.Main()
         if config.UseWhitelist == true then
             local whitelisted = false 
             for k, v in pairs(config.Whitelist) do
-                if string.lower(v) == string.lower(playerUId) or string.lower(playerName) == string.lower(v) then
+                if string.lower(v) == string.lower(playerUId) then
                     whitelisted = true
-                    break
+                end
+                if string.lower(playerName) == string.lower(v) then
+                    whitelisted = true
                 end
             end
             if whitelisted == false then
