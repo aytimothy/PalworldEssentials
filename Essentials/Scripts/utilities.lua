@@ -98,9 +98,7 @@ function utilities.SendMessage(WorldContext, Message, Recipient)
             print(string.format("Could not send message '%s' to unknown user '%s'", Message, Recipient))
         end
     else
-        -- PalUtility:SendSystemToPlayerChat(WorldContext, Message, Recipient.PlayerUId)
-        PalUtility:SendSystemToPlayerChat(WorldContext, Message, WorldContext.PlayerUId)
-    end
+        PalUtility:SendSystemToPlayerChat(WorldContext, Message, Recipient.PlayerUId)
 end
 
 function utilities.GetPlayer(Id)
