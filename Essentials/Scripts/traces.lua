@@ -30,6 +30,17 @@ function traces.RegisterDebugHooks()
         local message = chatMessage.Message:ToString()
         print(string.format("ChatMessage: {\"sender\": \"%s\", \"senderGuid\": \"%s\", \"recipientGuid\": \"%s\", \"messageType\": %i, \"message\": \"%s\"}", sender, senderGuid, recipientGuid, messageType, message))
     end)
+
+    RegisterHook("/Script/Pal.PalGameModeLogin:OnLoginCompleted", function(Context, UserInfo, bSuccess, ErrorStr)
+        print("/Script/Pal.PalGameModeLogin:OnLoginCompleted")
+        print(string.format("UserInfo: %s", UserInfo:get():GetFullName():ToString()))
+        print(string.format("bSuccess: %s, ErrorStr: %s", tostring(bSuccess), ErrorStr:get():ToString()))
+    end)
+
+    RegisterHook("/Script/Engine.GameModeBase:K2_OnLogout", function(Context, ExitingController)
+        print("/Script/Pal.PalGamemode:K2_OnLogout")
+        print(string.format("ExitingController: %s", ExitingController:get():GetFullName()))
+    end)
 end
 
 return traces

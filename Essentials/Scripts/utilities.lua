@@ -3,18 +3,18 @@
 local utilities = {}
 
 function utilities.GuidToString(Guid)
-    local a = string.format("%016x", Guid.A)
-    local b = string.format("%016x", Guid.B)
-    local c = string.format("%016x", Guid.C)
-    local d = string.format("%016x", Guid.D)
+    local a = string.sub(string.format("%016x", Guid.A), -8)
+    local b = string.sub(string.format("%016x", Guid.B), -8)
+    local c = string.sub(string.format("%016x", Guid.C), -8)
+    local d = string.sub(string.format("%016x", Guid.D), -8)
     return a .. b .. c .. d
 end
 
 function utilities.GuidToString2(Guid)
-    local a = string.format("%016x", Guid["A"])
-    local b = string.format("%016x", Guid["B"])
-    local c = string.format("%016x", Guid["C"])
-    local d = string.format("%016x", Guid["D"])
+    local a = string.sub(string.format("%016x", Guid["A"]), -8)
+    local b = string.sub(string.format("%016x", Guid["B"]), -8)
+    local c = string.sub(string.format("%016x", Guid["C"]), -8)
+    local d = string.sub(string.format("%016x", Guid["D"]), -8)
     return a .. b .. c .. d
 end
 
@@ -108,11 +108,11 @@ function utilities.GetPlayer(Id)
         local playerState = player:GetPalPlayerState()
         if playerState ~= nil and playerState:IsValid() then
             -- Numerical, ie. 257
-            if Id == tostring(playerState.PlayerId) then
+            if tostring(Id) == tostring(playerState.PlayerId) then
                 return player
             end
             -- SteamId, ie. 76561198085564783
-            if Id == tostring(playerState.UniqueId) then
+            if tostring(Id) == tostring(playerState.UniqueId) then
                 return player
             end
             -- Unique Id, ie. 9CF2403E -> 2633121854
