@@ -83,6 +83,8 @@ end
 
 -- if in doubt, UObject:GetFullName() to figure out what the heck you are working with.
 
+local fguid = require("types/fguid")
+
 function utilities.SendMessage(WorldContext, Message, Recipient)
     if PalUtility == nil or not PalUtility:IsValid() then
         PalUtility = utilities.GetPalUtility()
@@ -97,7 +99,9 @@ function utilities.SendMessage(WorldContext, Message, Recipient)
             print(string.format("Could not send message '%s' to unknown user '%s'", Message, Recipient))
         end
     else
-        PalUtility:SendSystemToPlayerChat(WorldContext, Message, WorldContext.PlayerUId)
+        local _fguid  = WorldContext.PlayerUId
+        local _PlayerUId = fguid.new(_fguid["A"],_fguid["B"],_fguid["C"],_fguid["D"])   
+        PalUtility:SendSystemToPlayerChat(WorldContext, Message, _PlayerUId)
     end
 end
 
