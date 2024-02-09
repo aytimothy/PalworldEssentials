@@ -37,9 +37,21 @@ function traces.RegisterDebugHooks()
         print(string.format("bSuccess: %s, ErrorStr: %s", tostring(bSuccess), ErrorStr:get():ToString()))
     end)
 
+    RegisterHook("/Script/Engine.GameModeBase:K2_PostLogin", function(Context, NewPlayer)
+        print("/Script/Engine.GameModeBase:K2_PostLogin")
+        print(string.format("NewPlayer: %s", NewPlayer:get().GetFullName()))
+    end)
+
     RegisterHook("/Script/Engine.GameModeBase:K2_OnLogout", function(Context, ExitingController)
         print("/Script/Pal.PalGamemode:K2_OnLogout")
         print(string.format("ExitingController: %s", ExitingController:get():GetFullName()))
+    end)
+
+    -- death is probably APalPlayerCharacter:OnPlayerDeathAction__DelegateSignature()
+
+    RegisterHook("/Script/Pal.PalGameMode:RespawnPlayer", function(Context, PlayerIndex)
+        print("/Script/Pal.PalGameMode:RespawnPlayer")
+        print(string.format("PlayerIndex = %i", PlayerIndex))
     end)
 end
 

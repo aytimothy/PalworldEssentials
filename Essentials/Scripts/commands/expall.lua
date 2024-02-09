@@ -1,6 +1,7 @@
 local expall = {
-    adminOnly = true,
+    adminOnly = false,
     run = function(sender, rawMessage, commandArgs)
+        print("expall.lua:4")
         local utilities = require("./../utilities")
         local PalUtility = utilities.GetPalUtility()
         local cheatManager = PalUtility:GetPalCheatManager(sender)

@@ -60,6 +60,7 @@ function utilities.SendBroadcast(WorldContext, Message)
         PalUtility = utilities.GetPalUtility()
     end
 
+    print(string.format("[BROADCAST] %s", Message))
     PalUtility:SendSystemAnnounce(WorldContext, Message)
 end
 
@@ -97,7 +98,8 @@ function utilities.SendMessage(WorldContext, Message, Recipient)
             print(string.format("Could not send message '%s' to unknown user '%s'", Message, Recipient))
         end
     else
-        PalUtility:SendSystemToPlayerChat(WorldContext, Message, Recipient.PlayerUId)
+        -- PalUtility:SendSystemToPlayerChat(WorldContext, Message, Recipient.PlayerUId)
+        PalUtility:SendSystemToPlayerChat(WorldContext, Message, WorldContext.PlayerUId)
     end
 end
 

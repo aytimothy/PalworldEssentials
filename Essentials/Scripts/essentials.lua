@@ -130,11 +130,26 @@ function essentials.Main()
         local player = Context:get()
         local playerState = player.PlayerState
         local playerId = playerState.PlayerId
+        local playerUId = string.sub(string.format("%016x", playerState.PlayerUId.A), -8)
         local playerName = playerState.PlayerNamePrivate:ToString()
 
         if config.BroadcastUserConnection == true then
             local playerJoinMessage = string.format("%s has joined the game.", playerName)
             utilities.SendBroadcast(Context:get(), playerJoinMessage)
+        end
+
+        if config.UseWhitelist == true then
+            local whitelisted = false 
+            for k, v in pairs(config.Whitelist) do
+                if string.lower(v) == string.lower(playerUId) or string.lower(playerName) == string.lower(v) then
+                    whitelisted = true
+                    break
+                end
+            end
+            if whitelisted == false then
+                local playerNotWhitelistedMessage = string.format("%s (%s) tried to join the game but is not on the whitelist!", playerName, playerUniqueId)
+                utilities.SendBroadcast(Context:get(), playerNotWhitelistedMessage)
+            end
         end
 
         PlayerList[playerId] = playerName
@@ -149,7 +164,7 @@ function essentials.Main()
         local playerName = playerState.PlayerNamePrivate:ToString()
 
         if config.BroadcastUserConnection == true then 
-            local playerLeaveMessage = string.format("%s has left the game.", playerName)
+            local playerLeaveMessage = string.format("%s has died or left the game.", playerName)
             utilities.SendBroadcast(Context:get(), playerLeaveMessage)
         end
 

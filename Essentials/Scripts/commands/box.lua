@@ -39,6 +39,8 @@ end
 
 function doBoxSwap(sender, newContainerId)
     local utilities = require("./../utilities")
+    local PalUtility = utilities.GetPalUtility()
+    local PalCharacterContainerManager = PalUtility:GetCharacterContainerManager(sender)
 end
 
 -- Swaps your Palbox with another container so that (hopefully) infinite Pal space
